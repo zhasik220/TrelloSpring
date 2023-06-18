@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th = "http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="main.html">
+    <div layout:fragment="siteContent">
+        <div class="container">
+            <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#addFolder">
+                + Новая папка
+            </button>
+        </div>
+
+
+
+        <div class="modal fade" id="addFolder" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Доавить новую папку</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form th:action="@{'/add-folder'}" th:method="post">
+                            <div class="row">
+                                <div class="col-12">
+                                    <label>Название папки: </label>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-12">
+                                    <input type="text" class="form-control" name="name" placeholder="Название папки" required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                                <button type="submit" class="btn btn-secondary">Добавить</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="card mt-3" th:each="folder : ${folders}">
+                <div class="card-header">
+
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${folder.name}"></h5>
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <a th:href="@{'/details/' + ${folder.id}}" class="btn btn-secondary">Детали</a>
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                    th:data-bs-target="'#deleteFolder-' + ${folder.id}">
+                                Удалить
+                            </button>
+                        </div>
+                        <div class="modal fade" th:id="'deleteFolder-' + ${folder.id}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="staticBackdropLabel5">Удаление папки</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form th:action="@{'/delete-folder'}" method="post">
+                                            <input type="hidden" name="folder_id" th:value="${folder.id}">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <label>Вы уверены что хотите удалить данную папку?</label>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                                                <button class="btn btn-dark">Удалить</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</html>
